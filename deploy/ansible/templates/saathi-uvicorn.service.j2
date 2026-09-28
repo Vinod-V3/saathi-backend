@@ -44,7 +44,7 @@ EnvironmentFile={{ current_path }}/.env
 # deploy.yml) using its absolute path - systemd does not run through an
 # activated shell, so relying on `uvicorn` being on some PATH would not
 # work here the way it does in an interactive terminal.
-ExecStart={{ current_path }}/.venv/bin/uvicorn shikshalokam_saathi.asgi:application \
+ExecStart={{ current_path }}/.venv/bin/uvicorn shikshalokam_mohini.asgi:application \
     --host {{ uvicorn_host }} \
     --port {{ uvicorn_port }} \
     --workers {{ uvicorn_workers }} \

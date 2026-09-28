@@ -45,7 +45,7 @@ EnvironmentFile={{ current_path }}/.env
 # than one instance - two workers both named plain "worker" on different
 # hosts would collide/be indistinguishable in Celery's own bookkeeping;
 # "worker@<hostname>" keeps each instance uniquely identified for free.
-ExecStart={{ current_path }}/.venv/bin/celery -A shikshalokam_saathi worker \
+ExecStart={{ current_path }}/.venv/bin/celery -A shikshalokam_mohini worker \
     -P {{ celery_pool }} \
     --concurrency {{ celery_concurrency }} \
     --prefetch-multiplier {{ celery_prefetch_multiplier }} \
