@@ -22,6 +22,18 @@
 set -euo pipefail
 
 # `to_entries` turns {"K":"V"} into [{"key":"K","value":"V"}, ...]
-# `map(...)` formats each entry as a literal "KEY=VALUE" string
-# `.[]` unwraps the array so jq -r prints one line per entry, unquoted
-jq -r 'to_entries | map("\(.key)=\(.value)") | .[]'
+# `map(...)` formats each entry as a literal "KEY=VALUE" string. A plain
+# scalar value (string/number/bool) is rendered as-is via `tostring`, but a
+# JSON array value (e.g. CORS_ALLOWED_ORIGINS: ["a","b"]) is joined into a
+# plain comma-separated string instead - without this special case, jq's
+# default string interpolation for an array renders its literal JSON
+# (brackets, quotes and all) straight into the KEY=VALUE line, which then
+# corrupts any comma-split done downstream (e.g. Django's CORS origin list).
+# `.[]` unwraps the outer array so jq -r prints one line per entry, unquoted
+jq -r 'to_entries | map(
+    "\(.key)=" + (
+      if (.value | type) == "array" then (.value | map(tostring) | join(","))
+      else (.value | tostring)
+      end
+    )
+  ) | .[]'
