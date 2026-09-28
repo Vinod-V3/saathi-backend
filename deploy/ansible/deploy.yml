@@ -92,7 +92,7 @@
 
     # Secret names under vault_address above - assumed identical across
     # environments (only vault_address itself changes per env).
-    vault_env_path: "saathi_backend_service_env"
+    vault_env_path: "saathi_backend_env"
     vault_secrets_path: "saathi_gcp_credentials"
 
     # ---------------------------------------------------------------------
