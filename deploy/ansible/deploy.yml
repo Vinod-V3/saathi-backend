@@ -275,6 +275,14 @@
         # comment for why this has to happen after the move, not before.
         # =================================================================
 
+        - name: Ensure json2env.sh is executable
+          # Fresh git checkouts don't always preserve the executable bit
+          # depending on how it was committed - make sure it's runnable before
+          # the task above (and any future manual use) relies on it.
+          file:
+            path: "{{ current_path }}/scripts/json2env.sh"
+            mode: "0755"
+
         - name: DEBUG - TEMPORARY - print .env Vault URL
           debug:
             msg: "{{ vault_address }}{{ vault_env_path }}"
@@ -288,14 +296,6 @@
             | {{ current_path }}/scripts/json2env.sh > {{ current_path }}/.env
           args:
             creates: "{{ current_path }}/.env"
-
-        - name: Ensure json2env.sh is executable
-          # Fresh git checkouts don't always preserve the executable bit
-          # depending on how it was committed - make sure it's runnable before
-          # the task above (and any future manual use) relies on it.
-          file:
-            path: "{{ current_path }}/scripts/json2env.sh"
-            mode: "0755"
 
         # =================================================================
         # STEP 6 - Create a fresh logs/ directory inside the live app
